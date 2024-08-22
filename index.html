@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Api Gañido</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css"/>
+  <link rel="stylesheet" href="https://github.com/marelinguzman/img_repositorio/blob/main/papel.png?raw=true">
+  
+  <link rel = "stylesheet" href ="index.css">
+  <link rel="stylesheet" href="config.css">
+
+</head>
+<body>
+  
+  <div class = "container">
+    <div class = "envoltorio_comida">
+      <div class = "meal-search">
+        <h2 class = "titulo">API Gañido</h2>
+        <blockquote>La comida real no tiene ingredientes, la comida real son ingredientes.<br>
+        </blockquote>
+
+        <div class = "meal-search-box">
+          <input type = "text" class = "search-control" placeholder="Introduce un ingrediente en Ingles" id = "search-input">
+          <button type = "submit" class = "search-btn btn" id = "search-btn">
+            <i class = "fas fa-search"></i>
+          </button>
+        </div>
+      </div>
+
+      <div class = "meal-result">
+        <div class="categorias">
+            <div>
+                <input type="checkbox" id="cheese">
+            <label for="cheese">Cheese</label>
+            </div>
+            <div>
+                <input type="checkbox" id="egg">
+            <label for="egg">Egg</label>
+            </div>
+            <div>
+                <input type="checkbox" id="milk">
+            <label for="milk">Milk</label>
+            </div>
+        </div>
+        <h2 class = "titulo">Los resultados de tu búsqueda:</h2>
+        <div id= "meal">
+        </div>
+      </div>
+
+
+      <div class = "meal-details">
+        <button type = "button" class = "btn recipe-close-btn" id = "recipe-close-btn">
+          <i class = "fas fa-times"></i>
+        </button>
+
+        <div class = "meal-details-content">
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+
+  <script src = "main.js"></script>
+</body>
+</html>
