@@ -1,71 +1,114 @@
-const searchBtn = document.getElementById('search-btn');
-const mealList = document.getElementById('meal');
-const mealDetailsContent = document.querySelector('.meal-details-content');
-const recipeCloseBtn = document.getElementById('recipe-close-btn');
+document.addEventListener("DOMContentLoaded", cargarTodasLasComidas);
 
+const botonBusqueda = document.getElementById('boton-busqueda');
+const listaComida = document.getElementById('comida');
+const contenidoDetalles = document.querySelector('.contenido-detalles');
+const botonCerrarDetalles = document.getElementById('cerrar-detalles');
+const filtroQueso = document.getElementById('queso');
+const filtroHuevo = document.getElementById('huevo');
+const filtroLeche = document.getElementById('leche');
 
-searchBtn.addEventListener('click', getMealList);
-mealList.addEventListener('click', getMealRecipe);
-recipeCloseBtn.addEventListener('click', () => {
-    mealDetailsContent.parentElement.classList.remove('showRecipe');
-});
+// Eventos
+botonBusqueda.addEventListener('click', buscarComidas);
+listaComida.addEventListener('click', mostrarReceta);
+botonCerrarDetalles.addEventListener('click', cerrarReceta);
+filtroQueso.addEventListener('click', () => filtrarPorIngrediente('cheese'));
+filtroHuevo.addEventListener('click', () => filtrarPorIngrediente('egg'));
+filtroLeche.addEventListener('click', () => filtrarPorIngrediente('milk'));
 
-
-function getMealList(){
-    let searchInputTxt = document.getElementById('search-input').value.trim();
-    fetch(`https://www.themealdb.com/api/json/v1/1/filter.php?i=${searchInputTxt}`)
-    .then(response => response.json())
-    .then(data => {
-        let html = "";
-        if(data.meals){
-            data.meals.forEach(meal => {
-                html += `
-                    <div class = "meal-item" data-id = "${meal.idMeal}">
-                        <div class = "meal-img">
-                            <img src = "${meal.strMealThumb}" alt = "food">
-                        </div>
-                        <div class = "meal-name">
-                            <h3>${meal.strMeal}</h3>
-                            <a href = "#" class = "recipe-btn">Get Recipe</a>
-                        </div>
-                    </div>
-                `;
-            });
-            mealList.classList.remove('notFound');
-        } else{
-            html = "Sorry, we didn't find any meal!";
-            mealList.classList.add('notFound');
-        }
-
-        mealList.innerHTML = html;
-    });
+function cargarTodasLasComidas() {
+    fetch('https://www.themealdb.com/api/json/v1/1/search.php?s=')
+        .then(response => response.json())
+        .then(data => mostrarComidas(data.meals));
 }
 
-
-function getMealRecipe(e){
-    e.preventDefault();
-    if(e.target.classList.contains('recipe-btn')){
-        let mealItem = e.target.parentElement.parentElement;
-        fetch(`https://www.themealdb.com/api/json/v1/1/lookup.php?i=${mealItem.dataset.id}`)
+function buscarComidas() {
+    const entradaBusqueda = document.getElementById('entrada-busqueda').value.trim();
+    fetch(`https://www.themealdb.com/api/json/v1/1/filter.php?i=${entradaBusqueda}`)
         .then(response => response.json())
-        .then(data => mealRecipeModal(data.meals));
+        .then(data => mostrarComidas(data.meals));
+}
+
+function filtrarPorIngrediente(ingrediente) {
+    fetch(`https://www.themealdb.com/api/json/v1/1/filter.php?i=${ingrediente}`)
+        .then(response => response.json())
+        .then(data => mostrarComidas(data.meals));
+}
+
+function mostrarComidas(comidas) {
+    let html = "";
+    if (comidas) {
+        comidas.forEach(comida => {
+            html += `
+                <div class="comida-item" data-id="${comida.idMeal}">
+                    <div class="comida-img">
+                        <img src="${comida.strMealThumb}" alt="Imagen de comida">
+                    </div>
+                    <div class="comida-nombre">
+                        <h3>${comida.strMeal}</h3>
+                        <button class="boton-receta">Ver Receta</button>
+                    </div>
+                </div>
+            `;
+        });
+    } else {
+        html = "No se encontraron comidas.";
+    }
+    listaComida.innerHTML = html;
+}
+
+function mostrarReceta(e) {
+    if (e.target.classList.contains('boton-receta')) {
+        const comidaId = e.target.closest('.comida-item').dataset.id;
+        fetch(`https://www.themealdb.com/api/json/v1/1/lookup.php?i=${comidaId}`)
+            .then(response => response.json())
+            .then(data => mostrarModalReceta(data.meals[0]));
     }
 }
 
-function mealRecipeModal(meal){
-    console.log(meal);
-    meal = meal[0];
-    let html = `
-        <h2 class = "recipe-title">${meal.strMeal}</h2>
-        <p class = "recipe-category">${meal.strCategory}</p>
-        <div class = "recipe-instruct">
-            <h3>Instructions:</h3>
-            <p>${meal.strInstructions}</p>
+function mostrarModalReceta(comida) {
+    const html = `
+        <div class="nombres">
+            <h2>${comida.strMeal}</h2>
+        <p>${comida.strCategory}</p>
         </div>
-        <div class = "recipe-meal-img">
-            <img src = "${meal.strMealThumb}" alt = "">
+        <h3>Instrucciones:</h3>
+        <div class="ventana">
+            <p>${comida.strInstructions}</p>
+            <img src="${comida.strMealThumb}" alt="">
         </div>
     `;
-    mealDetailsContent.innerHTML = html;
-    mealDetailsContent.parentElement.classList.add('showRecipe');
+    contenidoDetalles.innerHTML = html;
+    document.querySelector('.detalles-comida').style.display = 'block';
+}
+
+function cerrarReceta() {
+    document.querySelector('.detalles-comida').style.display = 'none';
+}
+
+function filtrarPorIngrediente() {
+    // Verificar el estado de las checkboxes
+    const filtros = [];
+    if (filtroQueso.checked) filtros.push('cheese');
+    if (filtroHuevo.checked) filtros.push('egg');
+    if (filtroLeche.checked) filtros.push('milk');
+
+    // Si no hay filtros seleccionados, cargar todas las comidas
+    if (filtros.length === 0) {
+        cargarTodasLasComidas();
+    } else {
+        // Filtrar comidas por los ingredientes seleccionados
+        let promesas = filtros.map(filtro => fetch(`https://www.themealdb.com/api/json/v1/1/filter.php?i=${filtro}`)
+            .then(response => response.json())
+            .then(data => data.meals)
+        );
+
+        // Ejecutar todas las promesas de fetch y combinar los resultados
+        Promise.all(promesas)
+            .then(resultados => {
+                // Combinar los arrays de comidas de todos los filtros
+                let comidasFiltradas = [].concat(...resultados);
+                mostrarComidas(comidasFiltradas);
+            });
+    }
 }

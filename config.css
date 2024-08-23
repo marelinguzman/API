@@ -2,7 +2,7 @@
     padding: 0;
     margin: 0;
     box-sizing: border-box;
-}
+}   
 :root{
     --tenne-tawny: palevioletred;
     --tenne-tawny-dark: #ffaac5;
@@ -12,4 +12,5 @@ body{
     font-size: 1.05rem;
     font-family: 'Poppins', sans-serif;
     color: palevioletred;
+    font-size: 80%;
 }
