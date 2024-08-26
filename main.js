@@ -8,7 +8,6 @@ const filtroQueso = document.getElementById('queso');
 const filtroHuevo = document.getElementById('huevo');
 const filtroLeche = document.getElementById('leche');
 
-// Eventos
 botonBusqueda.addEventListener('click', buscarComidas);
 listaComida.addEventListener('click', mostrarReceta);
 botonCerrarDetalles.addEventListener('click', cerrarReceta);
@@ -87,26 +86,21 @@ function cerrarReceta() {
 }
 
 function filtrarPorIngrediente() {
-    // Verificar el estado de las checkboxes
     const filtros = [];
     if (filtroQueso.checked) filtros.push('cheese');
     if (filtroHuevo.checked) filtros.push('egg');
     if (filtroLeche.checked) filtros.push('milk');
 
-    // Si no hay filtros seleccionados, cargar todas las comidas
     if (filtros.length === 0) {
         cargarTodasLasComidas();
     } else {
-        // Filtrar comidas por los ingredientes seleccionados
         let promesas = filtros.map(filtro => fetch(`https://www.themealdb.com/api/json/v1/1/filter.php?i=${filtro}`)
             .then(response => response.json())
             .then(data => data.meals)
         );
 
-        // Ejecutar todas las promesas de fetch y combinar los resultados
         Promise.all(promesas)
             .then(resultados => {
-                // Combinar los arrays de comidas de todos los filtros
                 let comidasFiltradas = [].concat(...resultados);
                 mostrarComidas(comidasFiltradas);
             });

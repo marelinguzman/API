@@ -1,9 +1,7 @@
-/* General */
 body {
     font-family: 'Poppins', sans-serif;
     color: palevioletred;
 }
-
 .contenedor {
     max-width: 1280px;
     margin: 0 auto;
@@ -11,24 +9,20 @@ body {
     background: #fff;
     text-align: center;
 }
-
 .titulo {
     font-size: 2rem;
     margin: 1rem 0;
 }
-
 .buscar-caja {
     display: flex;
     justify-content: center;
     margin: 1.5rem 0;
 }
-
 .control-busqueda {
     padding: 0.5rem;
     width: 70%;
     font-size: 1rem;
 }
-
 .boton-busqueda {
     padding: 0.5rem 1rem;
     background-color: palevioletred;
@@ -36,27 +30,21 @@ body {
     border: none;
     cursor: pointer;
 }
-
-/* Comida */
 .resultado-comida {
     margin: 2rem 0;
 }
-
 .comida-item {
     border-radius: 1rem;
     box-shadow: 0 4px 21px -12px rgba(0, 0, 0, 0.79);
     margin: 2rem 0;
 }
-
 .comida-img img {
     width: 100%;
     border-radius: 10px 10px 5px 5px;
 }
-
 .comida-nombre {
     padding: 1rem;
 }
-
 .boton-receta {
     background: palevioletred;
     color: white;
@@ -66,7 +54,6 @@ body {
     border-radius: 5px;
     margin-top: 5px;
 }
-
 .detalles-comida {
     position: fixed;
     top: 50%;
@@ -78,7 +65,6 @@ body {
     border-radius: 1rem;
     display: none;
 }
-
 .cerrar-detalles {
     background: white;
     color: palevioletred;
